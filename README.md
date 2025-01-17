@@ -12,27 +12,19 @@ Clear Documentation: Each function is accompanied by comments explaining its pur
 Organized Structure: Files are structured logically, with related functions grouped for better discoverability.
 Diverse Use Cases: The repository includes functions for data manipulation, algorithm implementation, utility operations, and more.
 Usage
+
 Clone the repository:
-
-bash
-Copy
-Edit
 git clone https://github.com/yourusername/javascript-utility-functions.git
+
 Navigate to the project directory:
-
-bash
-Copy
-Edit
 cd javascript-utility-functions
-Import and use any function in your project. For example:
 
-javascript
-Copy
-Edit
+Import and use any function in your project. For example:
 import exampleFunction from './functions/exampleFunction';
 
 const result = exampleFunction(input);
 console.log(result);
+
 Technologies Used
 JavaScript: All functions are written in pure JavaScript, focusing on compatibility and performance.
 React: Used in this repository for showcasing examples, but the functions themselves are independent of the React framework.
@@ -44,3 +36,4 @@ If you have any questions, suggestions, or feedback, please feel free to reach o
 
 License
 This project is licensed under the MIT License. See the LICENSE file for more details.
+
