@@ -11,10 +11,31 @@
  *   checkArrayValuesAreValidStrings([123, "world"]); // Throws an Error
  */
 
-function checkArrayValuesAreValidStrings(array) {
-	array.forEach((element) => {
+function arrayValuesAreValidStrings(arr) {
+	arr.forEach((element) => {
 		if (typeof element !== 'string' || element.trim() === '') {
 			throw new error('All items in array must be a string and not empty');
+		}
+	});
+
+	return true;
+}
+
+function stringLengthsAreValid(arr, amount) {
+	if (!Array.isArray(arr)) {
+		throw new Error('Invalid input: arr must be an array of strings');
+	}
+	if (typeof amount !== 'number' || amount <= 0) {
+		throw new Error('Invalid input: amount must be a positive number');
+	}
+
+	arr.forEach((element) => {
+		const wordCount = element.trim().split(/\s+/).length;
+
+		if (wordCount > amount) {
+			throw new Error(
+				`All items in array must not exceed ${amount} in length.`
+			);
 		}
 	});
 
@@ -77,7 +98,7 @@ function addEmployeeAllergies({ name, allergies }) {
  * @throws {Error} If the provided allergies parameter is not an array.
  * @throws {Error} If any item in the allergies array is not a valid, non-empty string.
  */
-function addOnlyAllergies(allergies) {
+function addAllergiesOnly(allergies) {
 	// Ensure the allergies parameter is an array.
 	if (!Array.isArray(allergies)) {
 		throw new Error('Invalid input: allergies must be an array');
