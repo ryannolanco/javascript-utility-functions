@@ -42,8 +42,13 @@ function stringLengthsAreValid(arr, amount) {
 	return true;
 }
 
+
+//Create a read functionality to store information in state. This way we can access the ID via the state.
+// Have a section/page that displays employee information including ID, Name, and Allergies
+
+
 /**
- * Adds or updates employee allergy information in localStorage.
+ * Adds employee allergy information in localStorage.
  *
  * This function validates the input, ensures all allergy values are valid non-empty strings,
  * and then either adds a new employee record or updates an existing one by combining their
@@ -103,7 +108,39 @@ function addAllergiesOnly(allergies) {
 	if (!Array.isArray(allergies)) {
 		throw new Error('Invalid input: allergies must be an array');
 	}
+	// Verify that all elements in the allergies array are valid strings.
+	checkArrayValuesAreValidStrings(allergies);
+	localStorage.clear()
 
+	// Retrieve the existing list of allergies from localStorage, if available.
+	// The data is stored under the key 'employeeAllergies'.
+	// const storedAllergies = localStorage.getItem('employeeAllergies');
+
+	// Parse the stored allergies data into an array.
+	// If no data exists in localStorage, initialize with an empty array.
+	// let parsedAllergies = storedAllergies ? JSON.parse(storedAllergies) : [];
+
+	// Merge the new allergies with the existing ones, removing duplicates.
+	// Using a Set ensures each allergy appears only once.
+	// let updatedAllergies = new Set([...allergies, ...parsedAllergies]);
+
+
+	let updatedAllergies = new Set([...allergies]);
+
+
+	// Convert the Set back into an array and store it in localStorage.
+	// This step ensures that localStorage always contains serialized JSON data.
+	localStorage.setItem(
+		'employeeAllergies',
+		JSON.stringify([...updatedAllergies])
+	);
+}
+
+function updateAllergiesOnly(allergies) {
+	// Ensure the allergies parameter is an array.
+	if (!Array.isArray(allergies)) {
+		throw new Error('Invalid input: allergies must be an array');
+	}
 	// Verify that all elements in the allergies array are valid strings.
 	checkArrayValuesAreValidStrings(allergies);
 
