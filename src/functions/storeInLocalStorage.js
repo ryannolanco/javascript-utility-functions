@@ -49,7 +49,7 @@ function stringLengthsAreValid(arr, amount) {
  * @throws {Error} If the provided allergies parameter is not an array.
  * @throws {Error} If any item in the allergies array is not a valid, non-empty string.
  */
-function addAllergiesOnly(allergies) {
+function addAllergiesOnly(key, allergies) {
 	// Ensure the allergies parameter is an array.
 	if (!Array.isArray(allergies)) {
 		throw new Error('Invalid input: allergies must be an array');
@@ -58,8 +58,8 @@ function addAllergiesOnly(allergies) {
 	arrayValuesAreValidStrings(allergies);
 
 	// Retrieve the existing list of allergies from localStorage, if available.
-	// The data is stored under the key 'employeeAllergies'.
-	const storedAllergies = localStorage.getItem('employeeAllergies');
+	// The data is stored under the key.
+	const storedAllergies = localStorage.getItem(key);
 
 	// Parse the stored allergies data into an array.
 	// If no data exists in localStorage, initialize with an empty array.
@@ -71,10 +71,7 @@ function addAllergiesOnly(allergies) {
 
 	// Convert the Set back into an array and store it in localStorage.
 	// This step ensures that localStorage always contains serialized JSON data.
-	localStorage.setItem(
-		'employeeAllergies',
-		JSON.stringify([...updatedAllergies])
-	);
+	localStorage.setItem(key, JSON.stringify([...updatedAllergies]));
 }
 
 //Create a read functionality to store information in state. This way we can access the ID via the state.
@@ -89,6 +86,21 @@ function readLocalStorage(key) {
 		console.error('Error parsing localStorage data:', error);
 		return [];
 	}
+}
+
+//delete allergies
+
+function deleteAllergy(key, allergyToDelete) {
+	const storedData = localStorage.getItem(key);
+	const parsedData = JSON.parse(storedData);
+
+	const filteredData = parsedData.filter(
+		(allergy) => allergy !== allergyToDelete
+	);
+
+	localStorage.clear();
+
+	localStorage.setItem(key, JSON.stringify(filteredData));
 }
 
 /**
@@ -246,4 +258,10 @@ function updateEmployeeAllergies({ id, allergies }) {
 	localStorage.setItem('employeeAllergies', JSON.stringify(parsedEmployeeInfo));
 }
 
-export { checkArrayValuesAreValidStrings, addEmployeeAllergies };
+export {
+	arrayValuesAreValidStrings,
+	addEmployeeAllergies,
+	addAllergiesOnly,
+	deleteAllergy,
+	readLocalStorage,
+};

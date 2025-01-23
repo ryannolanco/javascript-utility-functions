@@ -1,18 +1,38 @@
 import { useState } from 'react';
-import { addEmployeeAllergies } from './functions/storeInLocalStorage';
-let testData1 = {
-	name: 'ryan',
-	allergies: ['chicken', 'rice', 'apples'],
-};
+import {
+	addAllergiesOnly,
+	readLocalStorage,
+	deleteAllergy,
+} from './functions/storeInLocalStorage';
 
-addEmployeeAllergies(testData1);
+const key = 'allergies';
 
-let testInfo1 = localStorage.getItem('employeeAllergies');
-// localStorage.clear();
-// console.log(localStorage);
+let testData1 = ['tacos', 'eggs', 'sauce'];
+let testData2 = ['tacos', 'eggs', 'mac and cheese'];
+
+addAllergiesOnly(key, testData1);
+addAllergiesOnly(key, testData2);
+
+let testInfo1 = readLocalStorage(key).sort();
+
+deleteAllergy(key, 'tacos');
+let testInfo2 = readLocalStorage(key).sort();
 
 function App() {
-	return <>{<div>{testInfo1}</div>}</>;
+	return (
+		<>
+			<ul>
+				{testInfo1.map((item, i) => (
+					<li key={i}>{item}</li>
+				))}
+			</ul>
+			<ul>
+				{testInfo2.map((item, i) => (
+					<li key={i}>{item}</li>
+				))}
+			</ul>
+		</>
+	);
 }
 
 export default App;
