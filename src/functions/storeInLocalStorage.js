@@ -42,10 +42,54 @@ function stringLengthsAreValid(arr, amount) {
 	return true;
 }
 
+/**
+ * Adds a list of allergies to the existing list stored in localStorage, ensuring no duplicates.
+ *
+ * @param {string[]} allergies - An array of allergy strings to be added.
+ * @throws {Error} If the provided allergies parameter is not an array.
+ * @throws {Error} If any item in the allergies array is not a valid, non-empty string.
+ */
+function addAllergiesOnly(allergies) {
+	// Ensure the allergies parameter is an array.
+	if (!Array.isArray(allergies)) {
+		throw new Error('Invalid input: allergies must be an array');
+	}
+	// Verify that all elements in the allergies array are valid strings.
+	arrayValuesAreValidStrings(allergies);
+
+	// Retrieve the existing list of allergies from localStorage, if available.
+	// The data is stored under the key 'employeeAllergies'.
+	const storedAllergies = localStorage.getItem('employeeAllergies');
+
+	// Parse the stored allergies data into an array.
+	// If no data exists in localStorage, initialize with an empty array.
+	let parsedAllergies = storedAllergies ? JSON.parse(storedAllergies) : [];
+
+	// Merge the new allergies with the existing ones, removing duplicates.
+	// Using a Set ensures each allergy appears only once.
+	let updatedAllergies = new Set([...allergies, ...parsedAllergies]);
+
+	// Convert the Set back into an array and store it in localStorage.
+	// This step ensures that localStorage always contains serialized JSON data.
+	localStorage.setItem(
+		'employeeAllergies',
+		JSON.stringify([...updatedAllergies])
+	);
+}
 
 //Create a read functionality to store information in state. This way we can access the ID via the state.
 // Have a section/page that displays employee information including ID, Name, and Allergies
 
+function readLocalStorage(key) {
+	const storedData = localStorage.getItem(key);
+	if (!storedData) return [];
+	try {
+		return JSON.parse(storedData);
+	} catch (error) {
+		console.error('Error parsing localStorage data:', error);
+		return [];
+	}
+}
 
 /**
  * Adds employee allergy information in localStorage.
@@ -72,7 +116,7 @@ function addEmployeeAllergies({ name, allergies }) {
 	}
 
 	//check to make sure all elements in array are valid strings
-	checkArrayValuesAreValidStrings(allergies);
+	arrayValuesAreValidStrings(allergies);
 
 	const storedEmployeeAllergies = localStorage.getItem('employeeAllergies');
 
@@ -96,53 +140,13 @@ function addEmployeeAllergies({ name, allergies }) {
 	localStorage.setItem('employeeAllergies', JSON.stringify(parsedEmployeeInfo));
 }
 
-/**
- * Adds a list of allergies to the existing list stored in localStorage, ensuring no duplicates.
- *
- * @param {string[]} allergies - An array of allergy strings to be added.
- * @throws {Error} If the provided allergies parameter is not an array.
- * @throws {Error} If any item in the allergies array is not a valid, non-empty string.
- */
-function addAllergiesOnly(allergies) {
-	// Ensure the allergies parameter is an array.
-	if (!Array.isArray(allergies)) {
-		throw new Error('Invalid input: allergies must be an array');
-	}
-	// Verify that all elements in the allergies array are valid strings.
-	checkArrayValuesAreValidStrings(allergies);
-	localStorage.clear()
-
-	// Retrieve the existing list of allergies from localStorage, if available.
-	// The data is stored under the key 'employeeAllergies'.
-	// const storedAllergies = localStorage.getItem('employeeAllergies');
-
-	// Parse the stored allergies data into an array.
-	// If no data exists in localStorage, initialize with an empty array.
-	// let parsedAllergies = storedAllergies ? JSON.parse(storedAllergies) : [];
-
-	// Merge the new allergies with the existing ones, removing duplicates.
-	// Using a Set ensures each allergy appears only once.
-	// let updatedAllergies = new Set([...allergies, ...parsedAllergies]);
-
-
-	let updatedAllergies = new Set([...allergies]);
-
-
-	// Convert the Set back into an array and store it in localStorage.
-	// This step ensures that localStorage always contains serialized JSON data.
-	localStorage.setItem(
-		'employeeAllergies',
-		JSON.stringify([...updatedAllergies])
-	);
-}
-
 function updateAllergiesOnly(allergies) {
 	// Ensure the allergies parameter is an array.
 	if (!Array.isArray(allergies)) {
 		throw new Error('Invalid input: allergies must be an array');
 	}
 	// Verify that all elements in the allergies array are valid strings.
-	checkArrayValuesAreValidStrings(allergies);
+	arrayValuesAreValidStrings(allergies);
 
 	// Retrieve the existing list of allergies from localStorage, if available.
 	// The data is stored under the key 'employeeAllergies'.
@@ -184,7 +188,7 @@ function deleteSelectedEmployee(employeeId) {
 		(employee) => employee.id !== employeeId
 	);
 
-	// Check if the employee was found and removed
+	// check if the employee was found and removed
 	if (updatedEmployeeInfo.length === parsedEmployeeInfo.length) {
 		throw new Error(
 			`Employee with ID ${employeeId} was not found in localStorage`
@@ -216,7 +220,7 @@ function updateEmployeeAllergies({ id, allergies }) {
 	if (!Array.isArray(allergies)) {
 		throw new Error('Invalid input: allergies must be an array');
 	}
-	checkArrayValuesAreValidStrings(allergies);
+	arrayValuesAreValidStrings(allergies);
 
 	// Retrieve stored employee data
 	const storedEmployeeAllergies = localStorage.getItem('employeeAllergies');
