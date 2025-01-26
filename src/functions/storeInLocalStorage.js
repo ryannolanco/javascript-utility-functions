@@ -118,7 +118,7 @@ function deleteAllergy(key, allergyToDelete) {
  * @throws {Error} If any element in the `allergies` array is not a valid non-empty string.
  */
 
-function addEmployeeAllergies({ name, allergies }) {
+function addEmployeeAllergies(key, { name, allergies }) {
 	if (!name || typeof name !== 'string') {
 		throw new Error('Invalid input: name must be a valid string');
 	}
@@ -130,7 +130,7 @@ function addEmployeeAllergies({ name, allergies }) {
 	//check to make sure all elements in array are valid strings
 	arrayValuesAreValidStrings(allergies);
 
-	const storedEmployeeAllergies = localStorage.getItem('employeeAllergies');
+	const storedEmployeeAllergies = localStorage.getItem(key);
 
 	// Parse or initialize the employee data
 	let parsedEmployeeInfo = storedEmployeeAllergies
@@ -149,10 +149,10 @@ function addEmployeeAllergies({ name, allergies }) {
 	parsedEmployeeInfo.push({ name, allergies: [...allergySet], id: id });
 
 	// Store updated data back in localStorage
-	localStorage.setItem('employeeAllergies', JSON.stringify(parsedEmployeeInfo));
+	localStorage.setItem(key, JSON.stringify(parsedEmployeeInfo));
 }
 
-function updateAllergiesOnly(allergies) {
+function updateAllergiesOnly(key, allergies) {
 	// Ensure the allergies parameter is an array.
 	if (!Array.isArray(allergies)) {
 		throw new Error('Invalid input: allergies must be an array');
@@ -162,7 +162,7 @@ function updateAllergiesOnly(allergies) {
 
 	// Retrieve the existing list of allergies from localStorage, if available.
 	// The data is stored under the key 'employeeAllergies'.
-	const storedAllergies = localStorage.getItem('employeeAllergies');
+	const storedAllergies = localStorage.getItem(key);
 
 	// Parse the stored allergies data into an array.
 	// If no data exists in localStorage, initialize with an empty array.
@@ -174,10 +174,7 @@ function updateAllergiesOnly(allergies) {
 
 	// Convert the Set back into an array and store it in localStorage.
 	// This step ensures that localStorage always contains serialized JSON data.
-	localStorage.setItem(
-		'employeeAllergies',
-		JSON.stringify([...updatedAllergies])
-	);
+	localStorage.setItem(key, JSON.stringify([...updatedAllergies]));
 }
 
 /**
@@ -186,9 +183,9 @@ function updateAllergiesOnly(allergies) {
  * @param {number} employeeId - The ID of the employee to delete.
  * @throws {Error} If the employee with the given ID is not found in localStorage.
  */
-function deleteSelectedEmployee(employeeId) {
+function deleteSelectedEmployee(key, employeeId) {
 	// Retrieve stored data from localStorage
-	const storedEmployeeAllergies = localStorage.getItem('employeeAllergies');
+	const storedEmployeeAllergies = localStorage.getItem(key);
 
 	// Parse or initialize the employee data
 	let parsedEmployeeInfo = storedEmployeeAllergies
@@ -208,10 +205,7 @@ function deleteSelectedEmployee(employeeId) {
 	}
 
 	// Update the localStorage with the new array
-	localStorage.setItem(
-		'employeeAllergies',
-		JSON.stringify(updatedEmployeeInfo)
-	);
+	localStorage.setItem(key, JSON.stringify(updatedEmployeeInfo));
 }
 
 /**
@@ -222,7 +216,7 @@ function deleteSelectedEmployee(employeeId) {
  * @param {string[]} param0.allergies - The list of new allergies to add.
  * @throws {Error} If input validation fails or the employee is not found.
  */
-function updateEmployeeAllergies({ id, allergies }) {
+function updateEmployeeAllergies(key, { id, allergies }) {
 	// Validate `id`
 	if (typeof id !== 'number' || id <= 0) {
 		throw new Error('Invalid input: id must be a positive number');
@@ -235,7 +229,7 @@ function updateEmployeeAllergies({ id, allergies }) {
 	arrayValuesAreValidStrings(allergies);
 
 	// Retrieve stored employee data
-	const storedEmployeeAllergies = localStorage.getItem('employeeAllergies');
+	const storedEmployeeAllergies = localStorage.getItem(key);
 	let parsedEmployeeInfo = storedEmployeeAllergies
 		? JSON.parse(storedEmployeeAllergies)
 		: [];
@@ -255,7 +249,16 @@ function updateEmployeeAllergies({ id, allergies }) {
 	}
 
 	// Save updated data back to localStorage
-	localStorage.setItem('employeeAllergies', JSON.stringify(parsedEmployeeInfo));
+	localStorage.setItem(key, JSON.stringify(parsedEmployeeInfo));
+}
+
+function readEmployeeInformation(key) {
+	const storedEmployeeAllergies = localStorage.getItem(key);
+	let parsedEmployeeInfo = storedEmployeeAllergies
+		? JSON.parse(storedEmployeeAllergies)
+		: [];
+
+	return parsedEmployeeInfo;
 }
 
 export {
@@ -264,4 +267,5 @@ export {
 	addAllergiesOnly,
 	deleteAllergy,
 	readLocalStorage,
+	readEmployeeInformation,
 };
