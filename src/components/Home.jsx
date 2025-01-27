@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AllergyList from './AllergyList';
 import AllergyForm from './AllergyForm';
 import { addEmployeeAllergies } from '../functions/storeInLocalStorage';
+import AllergyFilter from './AllergyFilter';
 
 const Home = () => {
 	const key = 'allergies';
@@ -14,11 +15,12 @@ const Home = () => {
 
 	return (
 		<>
-			<AllergyForm
+			{/* <AllergyForm
 				employeeInformation={employeeInformation}
 				setEmployeeInformation={setEmployeeInformation}
-			/>
-			<AllergyList />
+			/> */}
+			<AllergyFilter />
+			{/* <AllergyList /> */}
 		</>
 	);
 };
