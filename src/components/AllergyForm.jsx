@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ingredients from '../db/data';
 
-const AllergyForm = ({ employeeInformation, setEmployeeInformation }) => {
+const AllergyForm = () => {
+	const [employeeInformation, setEmployeeInformation] = useState({
+		name: '',
+		allergies: [],
+	});
+
+	const { name, allergies } = employeeInformation; // Destructure for cleaner JSX
+
 	const handleChange = (event) => {
 		const { name, value } = event.target;
 		setEmployeeInformation((prev) => ({ ...prev, [name]: value }));
 	};
 
 	const handleAllergyChange = (event) => {
-		const allergy = event.target.value;
-		const isChecked = event.target.checked;
+		const { value, checked } = event.target;
 
 		setEmployeeInformation((prev) => ({
 			...prev,
-			allergies: isChecked
-				? [...prev.allergies, allergy] // Add allergy if checked
-				: prev.allergies.filter((item) => item !== allergy), // Remove allergy if unchecked
+			allergies: checked
+				? [...(prev.allergies || []), value] // Ensure it's always an array and add new allergy
+				: prev.allergies.filter((item) => item !== value), // Remove if unchecked
 		}));
 	};
 
@@ -22,26 +29,22 @@ const AllergyForm = ({ employeeInformation, setEmployeeInformation }) => {
 		<form className="employee-form">
 			<label>
 				Name:
-				<input
-					type="text"
-					name="name"
-					value={employeeInformation.name}
-					onChange={handleChange}
-				/>
+				<input type="text" name="name" value={name} onChange={handleChange} />
 			</label>
+
 			<div>
 				<label>Allergies:</label>
 				{ingredients.map((ingredient, index) => (
 					<div key={index}>
 						<input
 							type="checkbox"
-							checked={employeeInformation.allergies.includes(ingredient)}
-							id={index}
+							checked={allergies.includes(ingredient)}
+							id={`allergy-${index}`}
 							name="allergies"
 							value={ingredient}
 							onChange={handleAllergyChange}
 						/>
-						<label htmlFor={index}>{ingredient}</label>
+						<label htmlFor={`allergy-${index}`}>{ingredient}</label>
 					</div>
 				))}
 			</div>

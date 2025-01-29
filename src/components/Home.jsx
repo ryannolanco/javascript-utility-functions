@@ -6,7 +6,7 @@ import AllergyFilter from './AllergyFilter';
 
 const Home = () => {
 	const key = 'allergies';
-	const [employeeInformation, setEmployeeInformation] = useState({});
+	// const [employeeInformation, setEmployeeInformation] = useState({});
 	const [allergies, setAllergies] = useState([]);
 
 	// useEffect(() => {
@@ -15,10 +15,10 @@ const Home = () => {
 
 	return (
 		<>
-			{/* <AllergyForm
-				employeeInformation={employeeInformation}
-				setEmployeeInformation={setEmployeeInformation}
-			/> */}
+			<AllergyForm
+			// employeeInformation={employeeInformation}
+			// setEmployeeInformation={setEmployeeInformation}
+			/>
 			<AllergyFilter />
 			{/* <AllergyList /> */}
 		</>
